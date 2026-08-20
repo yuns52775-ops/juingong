@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Pretendard Variable", Pretendard, ui-sans-serif, system-ui,
+    "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+
+  /* Forest palette. Deep green + bone paper + a single deep-rose accent. */
+  --color-paper: #f4f5f1;
+  --color-paper-raised: #fbfbf9;
+  --color-ink: #14231c;
+  --color-ink-soft: #4a5c52;
+  --color-forest: #1e3a2d;
+  --color-forest-deep: #101a15;
+  --color-forest-raised: #182a21;
+  --color-moss: #7d9184;
+  --color-accent: #b23a57;
+  --color-accent-lifted: #d4657f;
+
+  /* One radius system: cards 1.75rem, inputs 0.875rem, interactive pills full. */
+  --radius-card: 1.75rem;
+  --radius-inner: 1.375rem;
+  --radius-field: 0.875rem;
+
+  --ease-fluid: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  font-feature-settings: "ss01", "tnum" 0;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/*
+  Paper grain. Fixed and pointer-events-none so it never repaints while
+  scrolling. Gives the page the texture of a printed book jacket.
+*/
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme: dark) {
+  .grain {
+    opacity: 0.05;
+  }
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: #ffffff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :focus-visible {
+    outline-color: var(--color-accent-lifted);
+  }
+}
+
+/* Horizontal rails hide their scrollbar but stay keyboard and touch scrollable. */
+.rail {
+  scrollbar-width: none;
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
