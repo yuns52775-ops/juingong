@@ -1,12 +1,14 @@
-"use client";
-
-import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
 
 /*
   Scroll entry reveal. Motivation: storytelling. Sections carry the product
   narrative in sequence, so each one settles in as the reader arrives.
-  Transform and opacity only, and it collapses to static under reduced motion.
+
+  This renders visible by default. The bootstrap script in app/layout.tsx
+  opts the page into the hidden start state and drives the reveal with an
+  IntersectionObserver, so a blocked or failed JS bundle leaves the page
+  readable instead of blank. Animation is transform and opacity only, and
+  reduced-motion callers get the content with no transition at all.
 */
 export function Reveal({
   children,
@@ -17,17 +19,13 @@ export function Reveal({
   delay?: number;
   className?: string;
 }) {
-  const reduce = useReducedMotion();
-
   return (
-    <motion.div
+    <div
+      data-reveal
       className={className}
-      initial={reduce ? false : { opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
+      style={delay ? { transitionDelay: `${delay}s` } : undefined}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

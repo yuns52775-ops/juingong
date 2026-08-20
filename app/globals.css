@@ -84,6 +84,34 @@ body {
   }
 }
 
+/*
+  Scroll reveal. Content is visible by default so a blocked or failed JS
+  bundle never leaves the page blank. The bootstrap script in layout.tsx
+  adds .js-reveal only once it can actually run the observer, and marks
+  each block with data-in as it enters the viewport.
+*/
+.js-reveal [data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 800ms var(--ease-fluid),
+    transform 800ms var(--ease-fluid);
+}
+
+.js-reveal [data-reveal][data-in] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    transition-delay: 0ms !important;
+  }
+}
+
 /* Horizontal rails hide their scrollbar but stay keyboard and touch scrollable. */
 .rail {
   scrollbar-width: none;
