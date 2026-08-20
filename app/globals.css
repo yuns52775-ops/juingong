@@ -112,6 +112,47 @@ body {
   }
 }
 
+/*
+  Skeleton sweep for the cover being drawn. Shaped like the final cover
+  rather than a generic spinner, and animated with transform only.
+*/
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(255 255 255 / 0.45),
+    transparent
+  );
+  animation: shimmer-sweep 1.6s var(--ease-fluid) infinite;
+}
+
+@media (prefers-color-scheme: dark) {
+  .shimmer::after {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(255 255 255 / 0.12),
+      transparent
+    );
+  }
+}
+
+@keyframes shimmer-sweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer::after {
+    animation: none;
+  }
+}
+
 /* Horizontal rails hide their scrollbar but stay keyboard and touch scrollable. */
 .rail {
   scrollbar-width: none;

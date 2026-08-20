@@ -25,14 +25,19 @@ import path from "node:path";
 const ROOT = process.cwd();
 const WORK = path.join(os.tmpdir(), "juingong-buildcheck");
 
-const DIRS = ["app", "components", "public"];
-const FILES = [
-  "package.json",
-  "package-lock.json",
-  "tsconfig.json",
-  "next.config.ts",
-  "postcss.config.mjs",
-];
+/*
+  Mirror everything except build output and local-only state. An allowlist
+  silently skipped new source folders, which showed up as a broken build
+  rather than a missing copy.
+*/
+const SKIP = new Set([
+  "node_modules",
+  ".next",
+  ".git",
+  ".vercel",
+  ".claude",
+  "scripts",
+]);
 
 function copyDir(from, to) {
   mkdirSync(to, { recursive: true });
@@ -50,18 +55,18 @@ function run(cmd) {
 
 mkdirSync(WORK, { recursive: true });
 
-// Mirror sources. Stale copies of deleted files would hide real errors.
-for (const dir of DIRS) {
-  const from = path.join(ROOT, dir);
-  if (!existsSync(from)) continue;
-  const to = path.join(WORK, dir);
-  rmSync(to, { recursive: true, force: true });
-  copyDir(from, to);
-}
-
-for (const file of FILES) {
-  const from = path.join(ROOT, file);
-  if (existsSync(from)) copyFileSync(from, path.join(WORK, file));
+// Stale copies of deleted files would hide real errors, so each tree is
+// cleared before it is rewritten.
+for (const entry of readdirSync(ROOT, { withFileTypes: true })) {
+  if (SKIP.has(entry.name)) continue;
+  const from = path.join(ROOT, entry.name);
+  const to = path.join(WORK, entry.name);
+  if (entry.isDirectory()) {
+    rmSync(to, { recursive: true, force: true });
+    copyDir(from, to);
+  } else if (entry.isFile()) {
+    copyFileSync(from, to);
+  }
 }
 
 // Reinstall only when the lockfile actually changed. Keeps repeat runs fast.

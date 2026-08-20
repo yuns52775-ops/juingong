@@ -8,7 +8,7 @@ import Link from "next/link";
   next to the label.
 */
 export const PRIMARY_CTA_LABEL = "무료로 표지 만들기";
-export const PRIMARY_CTA_HREF = "#start";
+export const PRIMARY_CTA_HREF = "/start";
 
 export function CtaButton({
   href = PRIMARY_CTA_HREF,

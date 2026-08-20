@@ -3,7 +3,7 @@ import { Reveal } from "./reveal";
 
 export function ClosingCta() {
   return (
-    <section id="start" className="px-5 pb-24 sm:px-8 sm:pb-32">
+    <section className="px-5 pb-24 sm:px-8 sm:pb-32">
       <Reveal>
         <div className="relative mx-auto max-w-[1220px] overflow-hidden rounded-card bg-forest px-8 py-20 sm:px-16 sm:py-28 dark:bg-forest-raised">
           <div
